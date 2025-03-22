@@ -1,5 +1,19 @@
 import OBSWebSocket from 'obs-websocket-js';
 
+// Type definitions for OBS WebSocket responses
+interface SourceFilter {
+    filterName: string;
+    filterKind: string;
+    filterSettings?: Record<string, unknown>;
+    [key: string]: unknown;
+}
+
+interface SceneItem {
+    sourceName: string;
+    sceneItemId: number;
+    [key: string]: unknown;
+}
+
 class OBSWebSocketManager {
     private static instance: OBSWebSocketManager;
     private obs: OBSWebSocket;
@@ -68,7 +82,6 @@ class OBSWebSocketManager {
         this.statusListeners.forEach(listener => listener(this.connectionStatus));
     }
 
-    // Add methods for interacting with video sources
     public async getScenes() {
         try {
             const { scenes } = await this.obs.call('GetSceneList');
@@ -89,7 +102,6 @@ class OBSWebSocketManager {
         }
     }
 
-    // Method to apply protection filter
     public async applyProtectionFilter(sourceName: string, params: {
         model: string;
         strength: number;
@@ -100,7 +112,7 @@ class OBSWebSocketManager {
     }): Promise<boolean> {
         try {
             const existingFilters = await this.obs.call('GetSourceFilterList', { sourceName });
-            const hasProtectionFilter = existingFilters.filters.some((f: any) => f.filterName === 'DeepfakeProtection');
+            const hasProtectionFilter = (existingFilters.filters as SourceFilter[]).some((f: SourceFilter) => f.filterName === 'DeepfakeProtection');
 
             const filterSettings = {
                 contrast: 1.0 + (params.strength / 200),
@@ -137,10 +149,9 @@ class OBSWebSocketManager {
             return false;
         }
     }
-    // Add method to remove protection
+
     public async removeProtectionFilter(sourceId: string) {
         try {
-            // First try to disable the filters
             try {
                 await this.obs.call('SetSourceFilterEnabled', {
                     sourceName: sourceId,
@@ -157,7 +168,6 @@ class OBSWebSocketManager {
                 console.warn('Failed to disable filters:', error);
             }
 
-            // Then try to remove them
             try {
                 await this.obs.call('RemoveSourceFilter', {
                     sourceName: sourceId,
@@ -183,24 +193,6 @@ class OBSWebSocketManager {
         }
     }
 
-    // public async getSource(sourceName: string): Promise<HTMLVideoElement | null> {
-    //     try {
-    //         const settings = await this.obs.call('GetInputSettings', { inputName: sourceName });
-    //         const video = document.createElement('video');
-    //         video.autoplay = true;
-    //         video.muted = true;
-    //         video.playsInline = true;
-
-    //         // Assuming OBS provides a stream URL or similar mechanism
-    //         // This may need adjustment based on your OBS setup
-    //         video.src = `ws://localhost:4455/${sourceName}`; // Placeholder; adjust as needed
-    //         return video;
-    //     } catch (error) {
-    //         console.error('Failed to get source:', error);
-    //         return null;
-    //     }
-    // }
-    
     public async startVirtualCamera(): Promise<boolean> {
         try {
             await this.obs.call('StartVirtualCam');
@@ -226,7 +218,7 @@ class OBSWebSocketManager {
             const { sceneItems } = await this.obs.call('GetSceneItemList', {
                 sceneName: sceneName
             });
-            return sceneItems.map((item: any) => ({
+            return (sceneItems as SceneItem[]).map((item: SceneItem) => ({
                 sourceName: item.sourceName
             }));
         } catch (error) {
@@ -236,4 +228,4 @@ class OBSWebSocketManager {
     }
 }
 
-export default OBSWebSocketManager; 
+export default OBSWebSocketManager;
