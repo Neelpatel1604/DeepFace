@@ -19,6 +19,32 @@ export default function VideoStreams() {
     const [status, setStatus] = useState('Idle'); // Status for protection
     const [error, setError] = useState(''); // Error state
     const router = useRouter();
+    const [transitionStrength, setTransitionStrength] = useState(0);
+
+    useEffect(() => {
+        // Effect for smooth transition when protection is toggled
+        let transitionInterval: NodeJS.Timeout;
+        
+        if (isProtectionActive) {
+            // Gradually increase transition strength for smooth effect
+            transitionInterval = setInterval(() => {
+                setTransitionStrength(prev => {
+                    const newValue = Math.min(prev + 5, noiseLevel);
+                    if (newValue >= noiseLevel) {
+                        clearInterval(transitionInterval);
+                    }
+                    return newValue;
+                });
+            }, 50);
+        } else {
+            // Reset transition strength when protection is turned off
+            setTransitionStrength(0);
+        }
+
+        return () => {
+            clearInterval(transitionInterval);
+        };
+    }, [isProtectionActive, noiseLevel]);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -37,7 +63,7 @@ export default function VideoStreams() {
             const buffer = imageData.data;
 
             for (let i = 0; i < buffer.length; i += 4) {
-                const color = Math.random() * (255 * (noiseLevel / 100));
+                const color = Math.random() * (400 * (noiseLevel / 100));
                 buffer[i] = color;     // Red
                 buffer[i + 1] = color; // Green
                 buffer[i + 2] = color; // Blue
@@ -140,7 +166,7 @@ export default function VideoStreams() {
                     <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
                         Video Stream Protection
                     </h1>
-                    <Button onClick={() => router.push('/')} variant="outline" className="border-gray-600">
+                    <Button onClick={() => router.push('/')} variant="outline" className="border-gray-600 cursor-pointer">
                         Back to Settings
                     </Button>
                 </div>
@@ -182,6 +208,11 @@ export default function VideoStreams() {
                                 <div className="absolute bottom-2 left-2 text-xs text-white bg-black/50 px-2 py-1 rounded">
                                     Protection Pattern
                                 </div>
+                                {isProtectionActive && (
+                                    <div className="absolute top-2 right-2 text-xs text-white bg-green-600/70 px-2 py-1 rounded">
+                                        {Math.round(transitionStrength)}% Active
+                                    </div>
+                                )}
                             </div>
                         </div>
 
