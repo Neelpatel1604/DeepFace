@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import OBSWebSocketManager from '../utils/obsWebSocket';
-import { Button } from './ui/button';
 import {
   Select,
   SelectContent,
@@ -24,7 +23,6 @@ export default function SourceSelector({ onSourceSelect }: SourceSelectorProps) 
   useEffect(() => {
     const fetchSources = async () => {
       try {
-        const scenes = await obsManager.getScenes();
         const allSources = new Set<string>();
         
         // Get sources from each scene

@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
 import OBSWebSocketManager from '../utils/obsWebSocket';
-import {Input} from './ui/input';
 import { Button } from './ui/button';
 import { Label } from './ui/label';
 

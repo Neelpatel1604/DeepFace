@@ -32,12 +32,11 @@ export default function ComparisonPage() {
         initializeVideo();
         return () => {
             videoManager.cleanup();
-            // Stop the virtual camera when the component unmounts
             if (videoManager.obsManager.isConnected()) {
                 videoManager.obsManager.stopVirtualCamera();
             }
         };
-    }, []);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleProtectionToggle = () => {
         try {
