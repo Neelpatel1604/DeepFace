@@ -41,16 +41,16 @@ export default function Home() {
                                 1. Open OBS Studio.
                             </p>
                             <p>
-                                2. Go to "Tools" in the top menu.
+                                2. Go to &quot;Tools&quot; in the top menu.
                             </p>
                             <p>
-                                3. Select "WebSocket Server Settings".
+                                3. Select &quot;WebSocket Server Settings&quot;.
                             </p>
                             <p>
-                                4. If "Enable Authentication" is checked, your password will be displayed in the "Server Password" field.
+                                4. If &quot;Enable Authentication&quot; is checked, your password will be displayed in the &quot;Server Password&quot; field.
                             </p>
                             <p>
-                                5. If "Enable Authentication" is not checked, you do not need a password.
+                                5. If &quot;Enable Authentication&quot; is not checked, you do not need a password.
                             </p>
                         </div>
                     )}
