@@ -13,6 +13,37 @@ export default function VideoStreams({ onError }: VideoStreamsProps) {
     const videoManager = VideoStreamManager.getInstance();
     const [obsProtectedStream, setObsProtectedStream] = useState<MediaStream | null>(null);
 
+    const canvasRef = useRef<HTMLCanvasElement>(null);
+
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return;
+
+        canvas.width = canvas.clientWidth;
+        canvas.height = canvas.clientHeight;
+
+        const generateNoise = () => {
+            const imageData = ctx.createImageData(canvas.width, canvas.height);
+            const buffer = imageData.data;
+
+            for (let i = 0; i < buffer.length; i += 4) {
+                const color = Math.random() * 255; // Random grayscale
+                buffer[i] = color;     // Red
+                buffer[i + 1] = color; // Green
+                buffer[i + 2] = color; // Blue
+                buffer[i + 3] = 255;   // Alpha (fully opaque)
+            }
+
+            ctx.putImageData(imageData, 0, 0);
+            requestAnimationFrame(generateNoise);
+        };
+
+        generateNoise();
+    }, []);
+
     useEffect(() => {
         const initializeStreams = async () => {
             try {
@@ -83,13 +114,7 @@ export default function VideoStreams({ onError }: VideoStreamsProps) {
                         <span className="text-sm text-blue-400">Processing</span>
                     </div>
                     <div className="aspect-video bg-gray-900 rounded-lg overflow-hidden relative">
-                        <video
-                            ref={hashVideoRef}
-                            className="w-full h-full object-cover"
-                            autoPlay
-                            muted
-                            playsInline
-                        />
+                        <canvas ref={canvasRef} className="w-full h-full" />
                         <div className="absolute bottom-2 left-2 text-xs text-white bg-black/50 px-2 py-1 rounded">
                             Protection Pattern
                         </div>

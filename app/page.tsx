@@ -16,7 +16,7 @@ export default function Home() {
             <Toaster position="top-right" />
             <div className="max-w-3xl mx-auto">
                 <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600 mb-8">
-                    Deepfake Protection Settings
+                    DeepFace
                 </h1>
                 <SettingsPanel onConnect={handleConnect} />
             </div>
