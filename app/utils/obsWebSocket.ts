@@ -5,6 +5,7 @@ class OBSWebSocketManager {
     private obs: OBSWebSocket;
     private connectionStatus: boolean = false;
     private statusListeners: ((status: boolean) => void)[] = [];
+    private currentPassword: string | undefined;
 
     private constructor() {
         this.obs = new OBSWebSocket();
@@ -32,6 +33,7 @@ class OBSWebSocketManager {
 
     public async connect(address: string = 'localhost:4455', password?: string) {
         try {
+            this.currentPassword = password;
             await this.obs.connect(`ws://${address}`, password);
             return true;
         } catch (error) {
@@ -220,6 +222,50 @@ class OBSWebSocketManager {
         } catch (error) {
             console.error('Failed to remove protection filters:', error);
             return false;
+        }
+    }
+
+    public async getSource(sourceName: string): Promise<HTMLVideoElement | null> {
+        try {
+            // Get source settings to verify it exists
+            await this.obs.call('GetInputSettings', {
+                inputName: sourceName
+            });
+
+            // Create a video element to display the source
+            const video = document.createElement('video');
+            video.autoplay = true;
+            video.muted = true;
+            video.playsInline = true;
+
+            // Get the stream URL with authentication
+            const { streamUrl } = await this.obs.call('GetInputSettings', {
+                inputName: sourceName
+            });
+
+            if (streamUrl) {
+                video.src = streamUrl;
+                return video;
+            }
+
+            return null;
+        } catch (error) {
+            console.error('Failed to get source:', error);
+            return null;
+        }
+    }
+
+    public async getSceneSources(sceneName: string): Promise<Array<{ sourceName: string }>> {
+        try {
+            const { sceneItems } = await this.obs.call('GetSceneItemList', {
+                sceneName: sceneName
+            });
+            return sceneItems.map((item: any) => ({
+                sourceName: item.sourceName
+            }));
+        } catch (error) {
+            console.error('Failed to get scene sources:', error);
+            return [];
         }
     }
 }
