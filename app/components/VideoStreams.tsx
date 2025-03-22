@@ -1,6 +1,5 @@
 'use client';
-
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import VideoStreamManager from '../utils/videoStreams';
 
 interface VideoStreamsProps {
@@ -12,7 +11,7 @@ export default function VideoStreams({ onError }: VideoStreamsProps) {
     const protectedVideoRef = useRef<HTMLVideoElement>(null);
     const hashVideoRef = useRef<HTMLVideoElement>(null);
     const videoManager = VideoStreamManager.getInstance();
-
+    const [obsProtectedStream, setObsProtectedStream] = useState<MediaStream | null>(null);
     useEffect(() => {
         const initializeStreams = async () => {
             try {
@@ -21,16 +20,24 @@ export default function VideoStreams({ onError }: VideoStreamsProps) {
                     onError('Failed to initialize video streams');
                     return;
                 }
-
+                const obsStream = await videoManager.getStreamFromOBS(); // No source name needed
+                if (obsStream && protectedVideoRef.current) {
+                    setObsProtectedStream(obsStream);
+                    protectedVideoRef.current.srcObject = obsStream;
+                } else {
+                    onError('Failed to retrieve protected stream from OBS; using local stream as fallback.');
+                    if (protectedVideoRef.current) {
+                        protectedVideoRef.current.srcObject = videoManager.getProtectedStream();
+                    }
+                }
                 if (originalVideoRef.current) {
                     originalVideoRef.current.srcObject = videoManager.getOriginalStream();
-                }
-                if (protectedVideoRef.current) {
-                    protectedVideoRef.current.srcObject = videoManager.getProtectedStream();
                 }
                 if (hashVideoRef.current) {
                     hashVideoRef.current.srcObject = videoManager.getHashStream();
                 }
+
+
             } catch (error) {
                 onError('Failed to initialize video streams');
                 console.error('Stream initialization error:', error);
@@ -41,6 +48,9 @@ export default function VideoStreams({ onError }: VideoStreamsProps) {
 
         return () => {
             videoManager.cleanup();
+            if (obsProtectedStream) {
+                obsProtectedStream.getTracks().forEach(track => track.stop());
+            }
         };
     }, [onError]);
 
@@ -107,9 +117,8 @@ export default function VideoStreams({ onError }: VideoStreamsProps) {
                     </div>
                 </div>
             </div>
-
-            {/* Info Panel */}
-            <div className="bg-gray-800/30 p-4 rounded-lg backdrop-blur-sm border border-gray-700">
+                        {/* Info Panel */}
+                        <div className="bg-gray-800/30 p-4 rounded-lg backdrop-blur-sm border border-gray-700">
                 <div className="grid grid-cols-3 gap-4 text-sm">
                     <div>
                         <h3 className="font-medium text-gray-400 mb-1">Original Stream</h3>
@@ -132,5 +141,6 @@ export default function VideoStreams({ onError }: VideoStreamsProps) {
                 </div>
             </div>
         </div>
-    );
-} 
+       
+    );
+}

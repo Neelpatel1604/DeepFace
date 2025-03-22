@@ -90,95 +90,53 @@ class OBSWebSocketManager {
     }
 
     // Method to apply protection filter
-    public async applyProtectionFilter(sourceId: string, params: {
+    public async applyProtectionFilter(sourceName: string, params: {
         model: string;
         strength: number;
         iterations: number;
         alpha: number;
         epsilon: number;
         targetArea: 'face' | 'full' | 'custom';
-    }) {
+    }): Promise<boolean> {
         try {
-            // Check if filters exist and get their settings
-            let existingFilters;
-            try {
-                existingFilters = await this.obs.call('GetSourceFilterList', {
-                    sourceName: sourceId
-                });
-            } catch (error) {
-                console.error('Failed to get filter list:', error);
-                existingFilters = { filters: [] };
-            }
+            const existingFilters = await this.obs.call('GetSourceFilterList', { sourceName });
+            const hasProtectionFilter = existingFilters.filters.some((f: any) => f.filterName === 'DeepfakeProtection');
 
-            const hasColorFilter = existingFilters.filters.some((f: any) => f.filterName === 'DeepfakeProtection');
-            const hasLUTFilter = existingFilters.filters.some((f: any) => f.filterName === 'DeepfakeProtection_LUT');
-
-            // Update or create color correction filter
-            const colorFilterSettings = {
+            const filterSettings = {
                 contrast: 1.0 + (params.strength / 200),
                 brightness: 1.0 - (params.strength / 400),
                 gamma: 1.0 + (params.alpha * 10),
                 saturation: 1.0 + (params.epsilon),
                 hue_shift: params.iterations % 360,
-                opacity: 1.0
+                opacity: 1.0,
             };
 
-            if (hasColorFilter) {
+            if (hasProtectionFilter) {
                 await this.obs.call('SetSourceFilterSettings', {
-                    sourceName: sourceId,
+                    sourceName,
                     filterName: 'DeepfakeProtection',
-                    filterSettings: colorFilterSettings
+                    filterSettings,
                 });
             } else {
                 await this.obs.call('CreateSourceFilter', {
-                    sourceName: sourceId,
+                    sourceName,
                     filterName: 'DeepfakeProtection',
                     filterKind: 'color_filter_v2',
-                    filterSettings: colorFilterSettings
+                    filterSettings,
                 });
             }
 
-            // Update or create LUT filter
-            const lutFilterSettings = {
-                image_path: '', // We'll need to generate a LUT file
-                amount: params.strength / 100
-            };
-
-            if (hasLUTFilter) {
-                await this.obs.call('SetSourceFilterSettings', {
-                    sourceName: sourceId,
-                    filterName: 'DeepfakeProtection_LUT',
-                    filterSettings: lutFilterSettings
-                });
-            } else {
-                await this.obs.call('CreateSourceFilter', {
-                    sourceName: sourceId,
-                    filterName: 'DeepfakeProtection_LUT',
-                    filterKind: 'clut_filter',
-                    filterSettings: lutFilterSettings
-                });
-            }
-
-            // Enable both filters
             await this.obs.call('SetSourceFilterEnabled', {
-                sourceName: sourceId,
+                sourceName,
                 filterName: 'DeepfakeProtection',
-                filterEnabled: true
+                filterEnabled: true,
             });
-
-            await this.obs.call('SetSourceFilterEnabled', {
-                sourceName: sourceId,
-                filterName: 'DeepfakeProtection_LUT',
-                filterEnabled: true
-            });
-
             return true;
         } catch (error) {
             console.error('Failed to apply protection filter:', error);
             return false;
         }
     }
-
     // Add method to remove protection
     public async removeProtectionFilter(sourceId: string) {
         try {
@@ -225,33 +183,41 @@ class OBSWebSocketManager {
         }
     }
 
-    public async getSource(sourceName: string): Promise<HTMLVideoElement | null> {
+    // public async getSource(sourceName: string): Promise<HTMLVideoElement | null> {
+    //     try {
+    //         const settings = await this.obs.call('GetInputSettings', { inputName: sourceName });
+    //         const video = document.createElement('video');
+    //         video.autoplay = true;
+    //         video.muted = true;
+    //         video.playsInline = true;
+
+    //         // Assuming OBS provides a stream URL or similar mechanism
+    //         // This may need adjustment based on your OBS setup
+    //         video.src = `ws://localhost:4455/${sourceName}`; // Placeholder; adjust as needed
+    //         return video;
+    //     } catch (error) {
+    //         console.error('Failed to get source:', error);
+    //         return null;
+    //     }
+    // }
+    
+    public async startVirtualCamera(): Promise<boolean> {
         try {
-            // Get source settings to verify it exists
-            await this.obs.call('GetInputSettings', {
-                inputName: sourceName
-            });
-
-            // Create a video element to display the source
-            const video = document.createElement('video');
-            video.autoplay = true;
-            video.muted = true;
-            video.playsInline = true;
-
-            // Get the stream URL with authentication
-            const { streamUrl } = await this.obs.call('GetInputSettings', {
-                inputName: sourceName
-            });
-
-            if (streamUrl) {
-                video.src = streamUrl;
-                return video;
-            }
-
-            return null;
+            await this.obs.call('StartVirtualCam');
+            return true;
         } catch (error) {
-            console.error('Failed to get source:', error);
-            return null;
+            console.error('Failed to start virtual camera:', error);
+            return false;
+        }
+    }
+
+    public async stopVirtualCamera(): Promise<boolean> {
+        try {
+            await this.obs.call('StopVirtualCam');
+            return true;
+        } catch (error) {
+            console.error('Failed to stop virtual camera:', error);
+            return false;
         }
     }
 

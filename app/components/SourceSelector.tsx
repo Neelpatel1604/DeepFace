@@ -28,10 +28,6 @@ export default function SourceSelector({ onSourceSelect }: SourceSelectorProps) 
         const allSources = new Set<string>();
         
         // Get sources from each scene
-        for (const scene of scenes) {
-          const sceneSources = await obsManager.getSceneSources(scene.sceneName);
-          sceneSources.forEach(source => allSources.add(source.sourceName));
-        }
 
         setSources(Array.from(allSources));
       } catch (error) {

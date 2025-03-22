@@ -49,6 +49,8 @@ export default function SettingsPanel({ onConnect }: SettingsPanelProps) {
                 }));
                 toast.success('Connected to OBS successfully!');
                 onConnect();
+                // Start the virtual camera after connecting
+                await obsManager.startVirtualCamera();
             } else {
                 toast.error('Failed to connect to OBS');
             }
