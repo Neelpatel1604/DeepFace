@@ -1,39 +1,23 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+DeepFace 
 
-## Getting Started
-##First run below script
-```bash
-npm install
-```
-First, run the development server:
+## What is DeepFace?
+An OBS plugin that immunizes your recordings from being used in deepfakes. When a deepfake model tries to use you or your content, our immunization prevents the model from making any meaningful output. 
+This is a big win for creators online, and helps them get protection without relying on platforms. Creators can make sure:
+ - they aren’t being used in sexual content
+ = their aren’t being used to defraud others
+ = they aren’t being impersonated.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## How do I use DeepFace?
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Launch your OBS client. Make sure your OBS has OBS Websockets API installed. (may not be downloaded for versions before 28)
+2. In Tools, open Websocket Server Settings.
+3. In plugin settings, click Enable Websocket Server.
+4. In the Server Settings section, click Show Connect Info. Copy your password.
+5. Launch https://deepfacegenai.netlify.app/
+6. Click Get Started
+7. In Connection Settings, type in your OBS Websocket Address and paste your copied password from earlier. The OBS Websocket Address is by default 4455.
+8. If you'd like to customize your protection parameters before you connect, click Protection Weighting and adjust as needed.
+9. Click Connect and Continue.
+10. At this point, you will see two camera feeds of your facecam. The left stream is unprotected, and the right stream is set to be protected.
+11. Click Apply Protection. A Hash Visualization will appear, demonstrating how strong your current protection is. You can use the sliders to change its strength and iteration count.
+12. You can now return to your OBS client and start recording. Recorded videos will now be immunized using DeepFace.
