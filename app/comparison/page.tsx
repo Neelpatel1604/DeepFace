@@ -20,6 +20,7 @@ export default function VideoStreams() {
     const [error, setError] = useState(''); // Error state
     const router = useRouter();
     const [transitionStrength, setTransitionStrength] = useState(0);
+    const [advancedSettings, setAdvancedSettings] = useState({ alpha: 0.01 });
 
     useEffect(() => {
         // Effect for smooth transition when protection is toggled
@@ -142,6 +143,53 @@ export default function VideoStreams() {
             toast.error('Failed to toggle protection');
         }
     };
+    useEffect(() => {
+        const protection = protectedVideoRef.current;
+        if (!protection || !protection.parentElement) return;
+    
+        // Create or get existing gradient overlay
+        let gradientOverlay = protection.parentElement.querySelector('.gradient-overlay') as HTMLDivElement;
+        
+        if (!gradientOverlay && isProtectionActive) {
+            // Create new overlay if it doesn't exist and protection is active
+            gradientOverlay = document.createElement('div');
+            gradientOverlay.classList.add('gradient-overlay');
+            gradientOverlay.style.position = 'absolute';
+            gradientOverlay.style.top = '0';
+            gradientOverlay.style.left = '0';
+            gradientOverlay.style.width = '100%';
+            gradientOverlay.style.height = '100%';
+            gradientOverlay.style.pointerEvents = 'none';
+            gradientOverlay.style.zIndex = '1';
+            protection.parentElement.appendChild(gradientOverlay);
+        }
+        
+        // Update or remove gradient based on protection state
+        if (isProtectionActive && gradientOverlay) {
+            // Calculate gradient opacity - starting at 50% intensity when noiseLevel > 0
+            // and reaching 100% intensity at noiseLevel = 100
+            const baseOpacity = 0.25; // 50% of the max opacity of 0.5
+            const maxOpacity = 0.5;   // Maximum opacity value (as in original code)
+            
+            // Linear interpolation between baseOpacity and maxOpacity based on noiseLevel
+            const opacity = baseOpacity + ((maxOpacity - baseOpacity) * (noiseLevel / 100));
+            
+            // Apply the gradient with calculated opacity
+            gradientOverlay.style.background = `linear-gradient(to bottom right, transparent, rgba(0, 0, 0, ${opacity}))`;
+            gradientOverlay.style.display = 'block';
+        } else if (gradientOverlay) {
+            // Remove gradient overlay if protection is not active
+            gradientOverlay.remove();
+        }
+    
+        // Clean up function
+        return () => {
+            const existingOverlay = protection.parentElement?.querySelector('.gradient-overlay');
+            if (existingOverlay) {
+                existingOverlay.remove();
+            }
+        };
+    }, [isProtectionActive, noiseLevel]);
 
     const handleStrengthChange = (value: number[]) => {
         const newStrength = value[0];
@@ -166,7 +214,7 @@ export default function VideoStreams() {
                     <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
                         Video Stream Protection
                     </h1>
-                    <Button onClick={() => router.push('/')} variant="outline" className="border-gray-600 cursor-pointer">
+                    <Button onClick={() => router.push('/home')} variant="outline" className="border-gray-600 cursor-pointer">
                         Back to Settings
                     </Button>
                 </div>
@@ -267,7 +315,7 @@ export default function VideoStreams() {
                     <div className="space-y-4">
                         <div className="flex justify-between items-center">
                             <Label htmlFor="strength">Protection Strength</Label>
-                            <span className="text-sm text-gray-400">{noiseLevel} %</span>
+                            <span className="text-sm font-mono bg-gray-800 px-2 py-0.5 rounded">{noiseLevel} %</span>
                         </div>
                         <Slider
                             id="strength"
@@ -279,6 +327,25 @@ export default function VideoStreams() {
                             className="w-full"
                             disabled={!isProtectionActive}
                         />
+                        <div className="flex justify-between items-center">
+                                                    <Label htmlFor="iteration" className="text-sm">Iteration</Label>
+                                                    <span className="text-sm font-mono bg-gray-800 px-2 py-0.5 rounded">
+                                                        {advancedSettings.alpha.toFixed(3)}
+                                                    </span>
+                                                </div>
+                                                <Slider
+                                                    id="iteration"
+                                                    min={1}
+                                                    max={50}
+                                                    step={1}
+                                                    value={[advancedSettings.alpha]}
+                                                    onValueChange={(value) => setAdvancedSettings({
+                                                        ...advancedSettings,
+                                                        alpha: value[0]
+                                                    })}
+                                                    className="w-full"
+                                                />
+
                         <div className="flex justify-between items-center mt-4">
                             <span className="text-sm text-gray-400">Status: {status}</span>
                             <Button

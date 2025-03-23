@@ -120,7 +120,7 @@ class OBSWebSocketManager {
                 gamma: 1.0 + (params.alpha * 10),
                 saturation: 1.0 + (params.epsilon),
                 hue_shift: params.iterations % 360,
-                opacity: 1.0,
+                opacity: 0.1,
             };
 
             if (hasProtectionFilter) {
