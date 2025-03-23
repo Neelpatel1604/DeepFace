@@ -1,39 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DeepFake Defense - GenAI Genesis 2025
 
-## Getting Started
-##First run below script
+An AI-powered real-time deepfake detection tool developed for the GenAI Genesis Hackathon.
+
+## 🎯 Project Overview
+
+DeepFake Defense is a cutting-edge solution that helps combat the growing threat of deepfake content by providing real-time detection and analysis. Our tool helps users identify manipulated media content, ensuring digital authenticity in an era where AI-generated content is becoming increasingly sophisticated.
+
+## ✨ Key Features
+
+- Real-time deepfake detection
+- Live video stream analysis
+- High accuracy detection rates
+- User-friendly interface
+- Instant alerts for suspicious content
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18.x or higher
+- NPM or Yarn package manager
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/genaigenesis2025.git
+cd genaigenesis2025
+```
+
+2. Install dependencies:
 ```bash
 npm install
 ```
-First, run the development server:
 
+3. Start the development server:
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The application will be available at [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🛠️ Tech Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- [Next.js](https://nextjs.org/) - React framework
+- TypeScript
+- AI/ML Models for Deepfake Detection
+- Real-time Video Processing
 
-## Learn More
+## 🤝 Contributing
 
-To learn more about Next.js, take a look at the following resources:
+This project was developed during the GenAI Genesis Hackathon 2025. While it's primarily a hackathon project, we welcome contributions and suggestions.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 👥 Team
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- [Nathan Romero](GitHub Profile Link)
+- [Chris Cao](GitHub Profile Link)
+- [Wendy Lu](GitHub Profile Link)
+- [Neel Patel](GitHub Profile Link)
 
-## Deploy on Vercel
+## 📄 License
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🏆 Hackathon
+
+This project was created for GenAI Genesis 2025, a hackathon focused on innovative applications of generative AI technology.
+
+## 📞 Contact
+
+For questions or feedback, please open an issue in this repository.
