@@ -128,7 +128,7 @@ export default function VideoStreams() {
                 videoManager.obsManager.stopVirtualCamera();
             }
         };
-    }, [obsProtectedStream, videoManager]);
+    }, []);
 
     const handleProtectionToggle = () => {
         try {
