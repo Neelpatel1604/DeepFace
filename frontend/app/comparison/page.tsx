@@ -1,7 +1,6 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import OBSWebSocket from 'obs-websocket-js';
 import { toast, Toaster } from 'react-hot-toast';
 import VideoStreamManager from '../utils/videoStreams';
 import { Button } from "@/components/ui/button";
