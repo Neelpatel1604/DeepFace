@@ -64,17 +64,22 @@ const HowItWorks: React.FC = () => {
               content: (
                 <>
                   Customize your settings for optimal protection.
-                
                 </>
               ),
             },
             {
               title: 'Start Recording',
-              content: 'Hit record and let DeepFace do its magic.',
+              content:(
+                <>
+                 Hit protection and start recording in OBS and let DeepFace do its magic.
+                 Adjust your strength and Protection Strength and Iteration.
+                </>
+
+              ),
             },
             {
               title: 'Download Your Video',
-              content: 'Save your protected video with ease.',
+              content: 'Save your protected video with from OBS.',
             },
             {
               title: 'Deepfake-Proof Video',
