@@ -1,23 +1,57 @@
-DeepFace 
+# DeepFace
 
-## What is DeepFace?
-An OBS plugin that immunizes your recordings from being used in deepfakes. When a deepfake model tries to use you or your content, our immunization prevents the model from making any meaningful output. 
-This is a big win for creators online, and helps them get protection without relying on platforms. Creators can make sure:
- - they aren’t being used in sexual content
- = their aren’t being used to defraud others
- = they aren’t being impersonated.
+> Protect your content from deepfake manipulation with real-time immunization
 
-## How do I use DeepFace?
+## Overview
+DeepFace is an innovative OBS plugin designed to protect your content from deepfake manipulation. By implementing advanced immunization techniques, DeepFace prevents deepfake models from successfully utilizing your recordings to create synthetic content.
 
-1. Launch your OBS client. Make sure your OBS has OBS Websockets API installed. (may not be downloaded for versions before 28)
-2. In Tools, open Websocket Server Settings.
-3. In plugin settings, click Enable Websocket Server.
-4. In the Server Settings section, click Show Connect Info. Copy your password.
-5. Launch https://deepfacegenai.netlify.app/
-6. Click Get Started
-7. In Connection Settings, type in your OBS Websocket Address and paste your copied password from earlier. The OBS Websocket Address is by default 4455.
-8. If you'd like to customize your protection parameters before you connect, click Protection Weighting and adjust as needed.
-9. Click Connect and Continue.
-10. At this point, you will see two camera feeds of your facecam. The left stream is unprotected, and the right stream is set to be protected.
-11. Click Apply Protection. A Hash Visualization will appear, demonstrating how strong your current protection is. You can use the sliders to change its strength and iteration count.
-12. You can now return to your OBS client and start recording. Recorded videos will now be immunized using DeepFace.
+### Benefits
+DeepFace empowers creators with direct control over their content protection, eliminating dependency on platform-specific safeguards. With DeepFace, you can prevent:
+- Unauthorized use of your likeness in inappropriate or sexual content
+- Financial fraud through impersonation
+- General misuse of your identity in synthetic media
+
+## Installation and Setup Guide
+
+### System Requirements
+- OBS Studio 28.0.0 or higher
+- OBS Websockets API (included by default in OBS 28+)
+- Modern web browser (Chrome, Firefox, Edge recommended)
+- Stable internet connection
+
+### Configuration Steps
+
+#### 1. OBS Setup
+   - Open OBS Studio
+   - Navigate to Tools → Websocket Server Settings
+   - Enable the Websocket Server in plugin settings
+   - Click "Show Connect Info" and copy your password
+
+#### 2. DeepFace Configuration
+   - Visit https://deepfacegenai.netlify.app/
+   - Click "Get Started"
+   - Enter your connection details:
+     - OBS Websocket Address (default port: 4455)
+     - Paste your OBS websocket password
+   - (Optional) Adjust Protection Weighting parameters to customize your security settings
+
+#### 3. Activation
+   - Click "Connect and Continue"
+   - You'll see a split-screen view of your facecam:
+     - Left side: Original unprotected feed
+     - Right side: Protected feed preview
+   - Click "Apply Protection" to activate
+   - Use the Hash Visualization display to monitor and adjust your protection strength using the provided sliders
+
+#### 4. Start Recording
+   - Return to OBS
+   - Begin your recording session
+   - All recorded content will now be automatically protected by DeepFace's immunization system
+
+### Troubleshooting
+
+If you encounter connection issues:
+1. Verify that OBS is running and the Websocket Server is enabled
+2. Confirm your password was copied correctly
+3. Check that port 4455 isn't blocked by your firewall
+4. Ensure you're using a compatible OBS version
