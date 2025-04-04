@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import FuzzyText from '../components/ui/fuzzytext';
+import FuzzyText from './ui/fuzzytext';
 
 export default function Hero() {
   const handleOnClick = () => {

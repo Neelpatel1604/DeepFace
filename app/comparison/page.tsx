@@ -2,10 +2,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast, Toaster } from 'react-hot-toast';
-import VideoStreamManager from '../utils/videoStreams';
-import { Button } from "@/components/ui/button";
-import { Slider } from "@/components/ui/slider";
-import { Label } from "@/components/ui/label";
+import VideoStreamManager from '../../utils/videoStreams';
+import { Button } from "../../components/ui/button";
+import { Slider } from "../../components/ui/slider";
+import { Label } from "../../components/ui/label";
 
 export default function VideoStreams() {
     const originalVideoRef = useRef<HTMLVideoElement>(null);

@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation';
-import SettingsPanel from '../components/SettingsPanel';
+import SettingsPanel from '../../components/SettingsPanel';
 
 const Home = () => {
     const router = useRouter();

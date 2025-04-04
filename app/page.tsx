@@ -1,13 +1,13 @@
 'use client';
 
-import Features from './components/Features';
-import Aurora from './components/ui/aurora';
-import HowItWorks from './components/HowItWorks';
-import Problem from './components/Problem';
-import Solution from './components/Solution';
-import Header from './components/Header';
-import Hero from './components/Hero';
-import Footer from './components/Footer';
+import Features from '../components/Features';
+import Aurora from '../components/ui/aurora';
+import HowItWorks from '../components/HowItWorks';
+import Problem from '../components/Problem';
+import Solution from '../components/Solution';
+import Header from '../components/Header';
+import Hero from '../components/Hero';
+import Footer from '../components/Footer';
 import Head from 'next/head';
 
 export default function Home() {

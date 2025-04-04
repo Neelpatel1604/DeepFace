@@ -3,8 +3,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Toaster } from 'react-hot-toast';
-import SettingsPanel from '../components/SettingsPanel';
-import Squares from '../components/ui/square'; // Adjust the import path as needed
+import SettingsPanel from './SettingsPanel';
+import Squares from './ui/square'; // Adjust the import path as needed
 
 export default function Home() {
   const router = useRouter();
